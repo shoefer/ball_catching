@@ -7,6 +7,10 @@ This material accompanies my doctoral thesis *On Decomposability in Robot Reinfo
 
 Includes jupyter notebooks providing proofs included in the thesis/paper that were verified with sympy.
 
+### TODO
+
+Code is still missing from the repository; currently only the proofs using sympy are contained.
+
 ### Quickstart
 
 - Check out ball-catching from the repository<br/>
