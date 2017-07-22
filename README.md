@@ -10,7 +10,7 @@ Includes jupyter notebooks providing proofs included in the thesis/paper that we
 ### Quickstart
 
 - Check out ball-catching from the repository<br/>
-```git clone https://github.com/shoefer/ball-catching.git```
+```git clone https://github.com/shoefer/ball_catching.git```
 
 #### Requirements
 
