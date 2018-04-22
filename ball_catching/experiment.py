@@ -31,10 +31,8 @@ def set_noise_levels(level):
     NOISE_TYPES["observation"] = NOISE_LEVELS
     NOISE_TYPES["system"] = NOISE_LEVELS
 
-    print
-    "Adapted noise levels: "
-    print
-    NOISE_LEVELS
+    print ("Adapted noise levels: ")
+    print (NOISE_LEVELS)
 
 def generate_experiment_sets(strategy, experiment_type, parametrizations, experiment_sets, expose_params=[]):
     # ELQR specific thing
