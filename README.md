@@ -114,19 +114,26 @@ You have full control over all types of experiments you want to run. To get help
 
 ### Running MPCStrategy
 
-In order to run the model-predictive control strategy in belief space [Belousov, 2016]
-
-https://github.com/b4be1/easy_catch
+In order to run the model-predictive control strategy in belief space [Belousov, 2016], you need to install casadi,
+an autodiff framework. The authors original source code is used: [easy_catch](https://github.com/b4be1/easy_catch)
 
 1) Install casadi 2.4.3
 
 - Go to https://sourceforge.net/projects/casadi/files/CasADi/2.4.3/ and download the py27 binary for your OS, e.g.
   for MacOS get casadi-py27-np1.9.1-v2.4.3.tar.gz
-- Append location to "casadi-py27-np1.9.1-v2.4.3" to your python path. Assuming you moved the files to
-  ```~/Workspace/casadi-py27-np1.9.1-v2.4.3```, add this line to your .bashrc (.bash_profile on Mac):
 
-    export PYTHONPATH="${HOME}/Workspace/casadi-py27-np1.9.1-v2.4.3:$PYTHONPATH"
--
+- Extract to some location in your workspace, e.g.
+
+    tar xfz casadi-py27-np1.9.1-v2.4.3.tar.gz ~/Workspace/casadi
+
+- Append location to casadi to your python path. Assuming you moved the files to
+  ```~/Workspace/casadi```, add this line to your .bashrc (.bash_profile on Mac):
+
+    export PYTHONPATH="${HOME}/Workspace/casadi:$PYTHONPATH"
+
+2) Run experiment
+
+    python ball_catching/run.py single --strategies MPCStrategy
 
 ## Proofs
 
@@ -139,3 +146,5 @@ The following proofs are available in jupyter notebook:
 ## References
 
 [Belousov, 2016] Belousov B, Neumann G, Rothkopf CA, Peters J. Catching heuristics are optimal control policies. In: Advances in Neural Information Processing Systems (NIPS). Barcelona, Spain; 2016. p. 1426–1434.
+
+This package contains adapted code from [scipy](http://www.scipy.org) and [easy_catch](https://github.com/b4be1/easy_catch)
