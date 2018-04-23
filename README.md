@@ -1,4 +1,4 @@
-# ball_catching: A Comparison of Cartesian and Angular Representations for Control
+# ball_catching
 
 #### python framework for studying control strategies to Chapman's ball catching problem
 
@@ -119,8 +119,7 @@ or LQG:
 
 Compare performance of strategies under drag:
 
-    python ball_catching/run.py multi3d --range xs --strategies LQGStrategy COVOAC3DStrategy --
-
+    python ball_catching/run.py multi3d --range s --strategies LQGStrategy COVIO3DStrategy --noise drag --noise_only
 
 ### Other experiments
 

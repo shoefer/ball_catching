@@ -1,6 +1,6 @@
 from ball_catching.utils.utils import *
 
-from ball_catching.settings import EXPERIMENT_RANGES_2D, EXPERIMENT_RANGES_3D, NOISE_PARAMS_OFF
+from ball_catching.settings import EXPERIMENT_RANGES_2D, EXPERIMENT_RANGES_3D, NOISE_PARAMS_OFF, NOISE_LEVELS, NOISE_TYPES
 
 def compute_delay_steps(delay_ms, framerate):
     return int(round(delay_ms * framerate))
