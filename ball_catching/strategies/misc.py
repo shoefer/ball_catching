@@ -1,4 +1,5 @@
-from ball_catching.dynamics.world import Strategy
+from ball_catching.strategies.base import Strategy
+
 
 # ----------------------------------------------------------------------------------------
 

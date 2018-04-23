@@ -1,21 +1,22 @@
-# ball-catching
+# ball_catching: A Comparison of Cartesian and Angular Representations for Control
 
 #### python framework for studying control strategies to Chapman's ball catching problem
 
-This material accompanies my paper *No Free Lunch in Ball Catching: A Comparison of Cartesian and Angular
-Representations for Control* as well as my doctoral thesis *On Decomposability in Robot Reinforcement Learning*.
-&copy; 2017 Sebastian Höfer
+This package accompanies the paper
 
-Includes jupyter notebooks providing proofs included in the thesis/paper that were verified with sympy.
+[Höfer, Raisch, Toussaint, Brock.
+No Free Lunch in Ball Catching: A Comparison of Cartesian and Angular Representations for Control.
+2018]()
 
-## Proofs for Section 4.2: Heuristics for Ball Catching
+as well as my doctoral thesis
 
-Proofs can be found in ```ipynb/proofs-chapman.ipynb```
+    [Sebastian Höfer. On decomposability in robot reinforcement learning. Dissertation. Technische Universität Berlin, Germany, June 2017.](http://dx.doi.org/10.14279/depositonce-6054)
 
-## Proofs for Appendix B.1: Angular Representation Violates Markov Property
+It contains
 
-Proofs can be found in ```ipynb/proof-angular-non-markov.ipynb```
-
+- A lightweight python library for running ball catching experiment, including implementations of all
+  control strategies presented in the paper.
+- jupyter notebooks with proofs included in the paper (verified proofs, using sympy).
 
 ## Quickstart
 
@@ -24,7 +25,7 @@ that contains all packages required.
 
 1) Check out ball-catching from the repository
 
-    git clone https://github.com/shoefer/ball_catching.git
+    git clone https://github.com/shoefer/ball_catching.git ball_catching
 
 2) Create conda environment
 
@@ -33,25 +34,39 @@ that contains all packages required.
 
 3) Install
 
+    cd ball_catching        # need to be in root folder of git repo
     pip install -e .
 
 4) Run experiments!
 
 ### Single strategy under single condition
 
-Angular controller (COVOAC) in 2D without noise:
+*Angular controller (COV-OAC)* in 2D without noise:
 
-    python run.py single --strategies COVOAC2DStrategy
+    python ball_catching/run.py single --strategies COVOAC2DStrategy
 
-Cartesian controller (LQG) in 2D without noise:
+It should given an output like this:
 
-    python run.py single --strategies LQGStrategy
+    Statistics: (trials 1)
+    mean(terminal_distance) -> 0.004031813928037309
+    std(terminal_distance) -> 0.0
+    mean(terminal_velocity) -> 3.9384176863998617
+    std(terminal_velocity) -> 0.0
+    mean(control_effort) -> 40.749233121618374
+    std(control_effort) -> 0.0
+    mean(duration) -> 4.3247960696889205
+    std(duration) -> 0.0
+    Agent velocity at 4.324796 s 3.938418
+
+*Cartesian controller (LQG)* in 2D without noise:
+
+    python ball_catching/run.py single --strategies LQGStrategy
 
 ### Multiple strategies with multiple initial conditions
 
 This command will run a comparison of one or multiple strategies under different settings:
 
-    python run.py multi --range s --strategies LQGStrategy COVOAC2DStrategy
+    python ball_catching/run.py multi --range s --strategies LQGStrategy COVOAC2DStrategy
 
 It will run for a while and then automatically generate experimental data and show plots (unless you pass
 ```--no_plot```). The experimental data will be stored in ```~/ball_catching_data``` (you can change this in config.py).
@@ -74,50 +89,53 @@ the second level is called *experiment folder* (COVOAC2DStrategy..., LQGStrategy
 
 Plot statistics for all strategies across all initial conditions:
 
-    python plotting/multi_experiment_set_plot.py 2DBallCatching__2018-04-22_22-04-54-399560
+    python ball_catching/plotting/multi_experiment_set_plot.py 2DBallCatching__2018-04-22_22-04-54-399560
 
 Compare overall performance of strategies:
 
-    python plotting/comparison_plot.py 2DBallCatching__2018-04-22_22-04-54-399560 --metrics distance
+    python ball_catching/plotting/comparison_plot.py 2DBallCatching__2018-04-22_22-04-54-399560 --metrics distance
 
 All plots will also be stored as PDF inside the experiment folders.
 
 Plot statistics only for a particular strategy:
 
-    python plotting/multi_experiment_set_plot.py 2DBallCatching__2018-04-22_22-04-54-399560/COVOAC2DStrategy_2D_ideal_DTinv-60_2018-04-22_22-04-54-400944
+    python ball_catching/plotting/multi_experiment_set_plot.py 2DBallCatching__2018-04-22_22-04-54-399560/COVOAC2DStrategy_2D_ideal_DTinv-60_2018-04-22_22-04-54-400944
 
 Inspect the performance of the strategy in a particular initial condition:
 
-    python plotting/single_experiment_plot.py 2DBallCatching__2018-04-22_22-04-54-399560/COVOAC2DStrategy_2D_ideal_DTinv-60_2018-04-22_22-04-54-400944/BC_COVOAC2DStrategy_2018-04-22_22-04-54-402504
+    python ball_catching/plotting/single_experiment_plot.py 2DBallCatching__2018-04-22_22-04-54-399560/COVOAC2DStrategy_2D_ideal_DTinv-60_2018-04-22_22-04-54-400944/BC_COVOAC2DStrategy_2018-04-22_22-04-54-402504
 
 
-#### Other experiments
+### Other experiments
 
 You have full control over all types of experiments you want to run. To get help on all possible variants run
 
-    python run.py --help
-
+    python ball_catching/run.py --help
 
 ### Running MPCStrategy
+
+In order to run the model-predictive control strategy in belief space [Belousov, 2016]
 
 https://github.com/b4be1/easy_catch
 
 1) Install casadi 2.4.3
 
-- Download from https://sourceforge.net/projects/casadi/files/CasADi/2.4.3/
-- Append location to "casadi-py27-np1.9.1-v2.4.3" to your python path
+- Go to https://sourceforge.net/projects/casadi/files/CasADi/2.4.3/ and download the py27 binary for your OS, e.g.
+  for MacOS get casadi-py27-np1.9.1-v2.4.3.tar.gz
+- Append location to "casadi-py27-np1.9.1-v2.4.3" to your python path. Assuming you moved the files to
+  ```~/Workspace/casadi-py27-np1.9.1-v2.4.3```, add this line to your .bashrc (.bash_profile on Mac):
+
+    export PYTHONPATH="${HOME}/Workspace/casadi-py27-np1.9.1-v2.4.3:$PYTHONPATH"
 -
 
+## Proofs
+
+The following proofs are available in jupyter notebook:
+
+- **Analysis of Chapman's Strategy** (Section 4.2.1): ```ipynb/proofs-chapman.ipynb```
+- **Angular Representation Violates Markov Property** (Section 4.2.1, Supplementary material): ```ipynb/proof-angular-non-markov.ipynb```
 
 
+## References
 
-#### Requirements
-
-- [SymPy](http://www.sympy.org/en/index.html)
-- NumPy
-- Matplotlib
-- Jupyter (Notebook)
-
-Follow the installation requirements for these frameworks.
-
-
+[Belousov, 2016] Belousov B, Neumann G, Rothkopf CA, Peters J. Catching heuristics are optimal control policies. In: Advances in Neural Information Processing Systems (NIPS). Barcelona, Spain; 2016. p. 1426–1434.

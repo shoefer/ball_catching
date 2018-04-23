@@ -6,13 +6,13 @@ from setuptools import setup
 here = os.path.abspath(os.path.dirname(__file__))
 try:
     # obtain version string from __init__.py
-    init_py = open(os.path.join(here, 'src', 'ball_catching', '__init__.py')).read()
+    init_py = open(os.path.join(here, 'ball_catching', '__init__.py')).read()
     version = re.search('__version__ = "(.*)"', init_py).groups()[0]
 except Exception:
     version = ''
 try:
     # obtain long description from README and CHANGES
-    README = open(os.path.join(here, 'README.rst')).read()
+    README = open(os.path.join(here, 'README.md')).read()
 except IOError:
     README = ''
 

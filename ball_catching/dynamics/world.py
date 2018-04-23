@@ -5,14 +5,11 @@ Created on Thu Jun 16 11:24:25 2016
 @author: shoefer
 """
 
-from warnings import warn
-import os
-
 import numpy as np
+import os
 import pandas as pd
 
 from ball_catching.utils.cont2discrete import cont2discrete
-
 
 # -----
 # state dim
@@ -36,29 +33,29 @@ STATE_DIM = 15
 
 # -----
 # action dim
-ACTION_DIM = 2 
+ACTION_DIM = 2
 
 # -----
 # system
 
-A = np.array([[ 0,	1,	0, 0,	0,	0, 0,	0,	0, 0,	0,	0,	0, 0, 0	],	# 0 -> xb
-			        [ 0,	0,	1, 0,	0,	0, 0,	0,	0, 0,	0,	0,	0, 0, 0	],	# 1 -> xb'
-			        [ 0,	0,	0, 0,	0,	0, 0,	0,	0, 0,	0,	0,	0, 0, 0	],	# 2 -> xb''
-      			  [ 0,	0,	0, 0,	1,	0, 0,	0,	0, 0,	0,	0,	0, 0, 0	],	# 3 -> yb
-      			  [ 0,	0,	0, 0,	0,	1, 0,	0,	0, 0,	0,	0,	0, 0, 0	],  # 4 -> yb'
-			        [ 0,	0,	0, 0,	0,	0, 0,	0,	0, 0,	0,	0,	0, 0, 0	],	# 5 -> yb''
-      			  [ 0,	0,	0, 0,	0,	0, 0,	1,	0, 0,	0,	0,	0, 0, 0	],	# 6 -> zb
-      			  [ 0,	0,	0, 0,	0,	0, 0,	0,	1, 0,	0,	0,	0, 0, 0	],	# 7 -> zb'
-			        [ 0,	0,	0, 0,	0,	0, 0,	0,	0, 0,	0,	0,	0, 0, 0	],	# 8 -> zb''
-      			  [ 0,	0,	0, 0,	0,	0, 0,	0,	0, 0,	1,	0,	0, 0, 0	],	# 9 -> xa
-      			  [ 0,	0,	0, 0,	0,	0, 0,	0,	0, 0,	0,	0,	0, 0, 0	],	# 10 -> xa'
-      			  [ 0,	0,	0, 0,	0,	0, 0,	0,	0, 0,	0,	0,	0, 0, 0	],	# 11 -> xa''
-      			  [ 0,	0,	0, 0,	0,	0, 0,	0,	0, 0,	0,	0,	0, 1, 0	],	# 12 -> za
-      			  [ 0,	0,	0, 0,	0,	0, 0,	0,	0, 0,	0,	0,	0, 0, 0 ],	# 13 -> za'
-      			  [ 0,	0,	0, 0,	0,	0, 0,	0,	0, 0,	0,	0,	0, 0, 0 ],	# 14 -> za''
-      			  ])
+A = np.array([[0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],  # 0 -> xb
+              [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],  # 1 -> xb'
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],  # 2 -> xb''
+              [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],  # 3 -> yb
+              [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],  # 4 -> yb'
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],  # 5 -> yb''
+              [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],  # 6 -> zb
+              [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],  # 7 -> zb'
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],  # 8 -> zb''
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],  # 9 -> xa
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],  # 10 -> xa'
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],  # 11 -> xa''
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],  # 12 -> za
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],  # 13 -> za'
+              [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],  # 14 -> za''
+              ])
 
-#A = np.array([[ 0,	1,	0, 0,	0,	0, 0,	0,	0, 0,	0,	0,	0, 0, 0	],	# 0 -> xb
+# A = np.array([[ 0,	1,	0, 0,	0,	0, 0,	0,	0, 0,	0,	0,	0, 0, 0	],	# 0 -> xb
 #			        [ 0,	0,	0, 0,	0,	0, 0,	0,	0, 0,	0,	0,	0, 0, 0	],	# 1 -> xb'
 #			        [ 0,	0,	0, 0,	0,	0, 0,	0,	0, 0,	0,	0,	0, 0, 0	],	# 2 -> xb''
 #      			  [ 0,	0,	0, 0,	1,	0, 0,	0,	0, 0,	0,	0,	0, 0, 0	],	# 3 -> yb
@@ -76,23 +73,22 @@ A = np.array([[ 0,	1,	0, 0,	0,	0, 0,	0,	0, 0,	0,	0,	0, 0, 0	],	# 0 -> xb
 #      			  ])
 
 # acceleration-based control
-Bacc = np.array([[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, ],
-			        [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, ]]).T
+Bacc = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, ],
+                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, ]]).T
 
 # velocity-based control
-Bvel = np.array([[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, ],
-                 [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, ]]).T
-
+Bvel = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, ],
+                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, ]]).T
 
 # observability is useful for Kalman filtering -> C only observes positions & agent velocities
-C = np.array( [
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # xb
-  [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], # yb
-  [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0], # zb
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0], # xa
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0], # xa'
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0], # za
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0], # za'
+C = np.array([
+  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],  # xb
+  [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],  # yb
+  [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],  # zb
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],  # xa
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],  # xa'
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],  # za
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],  # za'
 ])
 
 D = 0
@@ -102,102 +98,102 @@ D = 0
 
 class DynamicsModelType(type):
   def __call__(cls, *args, **kwargs):
+    try:
+      if len(args) == 0 and len(kwargs) == 0:
+        return cls.__instance
+      else:
+        raise AttributeError()
+    except AttributeError:
+      dm = super(DynamicsModelType, cls).__call__(*args, **kwargs)
+      if "copy" in kwargs and kwargs["copy"]:
+        print ("WARN: Generating copy of DynamicsModel, not resetting global one")
+        return dm
+
       try:
-          if len(args) == 0 and len(kwargs) == 0:
-            return cls.__instance
-          else:
-            raise AttributeError()
-      except AttributeError:
-          dm = super(DynamicsModelType, cls).__call__(*args, **kwargs)
-          if "copy" in kwargs and kwargs["copy"]:
-              print ("WARN: Generating copy of DynamicsModel, not resetting global one")
-              return dm
+        if cls.__instance is not None:
+          print ("INFO: Resetting global dynamics model")
+      except:
+        pass
 
-          try:
-              if cls.__instance is not None:
-                  print ("INFO: Resetting global dynamics model")
-          except:
-              pass
+      cls.__instance = dm
+      return cls.__instance
 
-          cls.__instance = dm
-          return cls.__instance
-  
 
 class DynamicsModel:
   __metaclass__ = DynamicsModelType
 
   def __init__(self, dt=None, framerate=None, gravity=9.81,
-                v_max=9., a_max=4.5,
-                rho=1.293, c=0.5, r=0.0366, mass=0.15,
-                sigma_ball=0., sigma_agent=0.,
-                drag = False,
-                dim = None,
-                wind_gust_force = [0.,0.,0.],
-                wind_gust_duration = 0.,
-                wind_gust_relative_start_time=0.,
-                copy = False):
-      """
-      Singleton dynamics model.
-      
-      If you want to create a new dynamics model w/o overwriting
-      the current global instance, then set "copy=True".
-      """      
-      
-      self.DT = dt
-      self.FRAMERATE = framerate
-      self.GRAVITY = gravity
+               v_max=9., a_max=4.5,
+               rho=1.293, c=0.5, r=0.0366, mass=0.15,
+               sigma_ball=0., sigma_agent=0.,
+               drag=False,
+               dim=None,
+               wind_gust_force=[0., 0., 0.],
+               wind_gust_duration=0.,
+               wind_gust_relative_start_time=0.,
+               copy=False):
+    """
+    Singleton dynamics model.
 
-      # agent properties
-      self.AGENT_V_MAX = v_max
-      self.AGENT_A_MAX = a_max
+    If you want to create a new dynamics model w/o overwriting
+    the current global instance, then set "copy=True".
+    """
 
-      # drag-relevant ball dynamics      
-      self.rho = rho
-      self.c = c
-      self.r = r
-      self.mass = mass
-      # necessary for drag
-      self.A = np.pi * self.r * self.r
-      self.sigma_ball = sigma_ball
-      self.sigma_agent = sigma_agent
+    self.DT = dt
+    self.FRAMERATE = framerate
+    self.GRAVITY = gravity
 
-      self.wind_gust_force = wind_gust_force
-      self.wind_gust_duration = wind_gust_duration
-      self.wind_gust_relative_start_time=wind_gust_relative_start_time
+    # agent properties
+    self.AGENT_V_MAX = v_max
+    self.AGENT_A_MAX = a_max
 
-      # dimensionality: 2d or 3d (for sampling noise)
-      self.dim = dim
-      assert (self.dim is not None)
-      self.drag = drag
+    # drag-relevant ball dynamics
+    self.rho = rho
+    self.c = c
+    self.r = r
+    self.mass = mass
+    # necessary for drag
+    self.A = np.pi * self.r * self.r
+    self.sigma_ball = sigma_ball
+    self.sigma_agent = sigma_agent
 
-      # discretized system matrices
-      self.Adt = None
-      self.Baccdt = None
-      self.Bacc = None
-      self.B = None
-      self.Bdt = None
-      self.cdt = None
-      
-      self.Bvel = None
-      self.Cdt = None
-      self.Ddt = None
-      
-      self.compute_J_drag = None
-        
-      self.copy = copy
-      self._generate_dynamics()
-      
+    self.wind_gust_force = wind_gust_force
+    self.wind_gust_duration = wind_gust_duration
+    self.wind_gust_relative_start_time = wind_gust_relative_start_time
+
+    # dimensionality: 2d or 3d (for sampling noise)
+    self.dim = dim
+    assert (self.dim is not None)
+    self.drag = drag
+
+    # discretized system matrices
+    self.Adt = None
+    self.Baccdt = None
+    self.Bacc = None
+    self.B = None
+    self.Bdt = None
+    self.cdt = None
+
+    self.Bvel = None
+    self.Cdt = None
+    self.Ddt = None
+
+    self.compute_J_drag = None
+
+    self.copy = copy
+    self._generate_dynamics()
+
   def _generate_dynamics(self):
     if self.DT is not None:
       assert (self.FRAMERATE is None)
-      self.FRAMERATE = 1./self.DT
+      self.FRAMERATE = 1. / self.DT
     else:
-      assert(self.FRAMERATE is not None)
-      self.DT = 1./self.FRAMERATE
-    
+      assert (self.FRAMERATE is not None)
+      self.DT = 1. / self.FRAMERATE
+
     # discretize system
-    self.Adt, self.Baccdt, self.Cdt, self.Ddt, dt = cont2discrete((A,Bacc,C,D), self.DT)
-    self.Adt, self.Bveldt, self.Cdt, self.Ddt, dt = cont2discrete((A,Bvel,C,D), self.DT)
+    self.Adt, self.Baccdt, self.Cdt, self.Ddt, dt = cont2discrete((A, Bacc, C, D), self.DT)
+    self.Adt, self.Bveldt, self.Cdt, self.Ddt, dt = cont2discrete((A, Bvel, C, D), self.DT)
 
     # default: acceleration driven dynamics
     self.B = Bacc
@@ -208,18 +204,18 @@ class DynamicsModel:
     self.cdt = np.zeros(self.Adt.shape[0])
     self.cdt[5] = -self.GRAVITY
     # hacky: set ddx(t) = 0 (because it is covered by constant offset)
-    self.Adt[2,2] = self.Adt[5,5] = self.Adt[8,8] = 0 
-    
+    self.Adt[2, 2] = self.Adt[5, 5] = self.Adt[8, 8] = 0
+
     if self.copy:
       print ("---------")
       print ("Local Dynamics: ")
     else:
       print ("=========")
       print ("GLOBAL Dynamics: ")
-    
+
     print ("Dimensionality: %d " % self.dim)
-    print ("  DT=%.5f, FRAMERATE=%.1f" % (self.DT, self.FRAMERATE) )
-    print ("  drag=%s" % (self.drag) )
+    print ("  DT=%.5f, FRAMERATE=%.1f" % (self.DT, self.FRAMERATE))
+    print ("  drag=%s" % (self.drag))
     print ("Agent: ")
     print ("  AGENT_A_MAX = %.2f" % self.AGENT_A_MAX)
     print ("  AGENT_V_MAX = %.2f" % self.AGENT_V_MAX)
@@ -233,19 +229,19 @@ class DynamicsModel:
       print ("=========")
 
   def is_equivalent(self, dyn):
-      return np.all( [
-        self.DT == dyn.DT,
-        self.FRAMERATE == dyn.FRAMERATE,
-        self.GRAVITY == dyn.GRAVITY, 
-        self.AGENT_V_MAX == dyn.AGENT_V_MAX,
-        self.AGENT_A_MAX == dyn.AGENT_A_MAX,
-        self.rho == dyn.rho,
-        self.c == dyn.c,
-        self.r == dyn.r,
-        self.mass == dyn.mass,
-        self.drag == dyn.drag,
-        self.dim == dyn.dim,
-        ])
+    return np.all([
+      self.DT == dyn.DT,
+      self.FRAMERATE == dyn.FRAMERATE,
+      self.GRAVITY == dyn.GRAVITY,
+      self.AGENT_V_MAX == dyn.AGENT_V_MAX,
+      self.AGENT_A_MAX == dyn.AGENT_A_MAX,
+      self.rho == dyn.rho,
+      self.c == dyn.c,
+      self.r == dyn.r,
+      self.mass == dyn.mass,
+      self.drag == dyn.drag,
+      self.dim == dyn.dim,
+    ])
 
   def set_presimulate(self):
     self._presimulate = True
@@ -254,7 +250,7 @@ class DynamicsModel:
   def set_run(self):
     self._presimulate = False
     # revert episilon for "popping"
-    #print ("len(self._epsilons)", len(self._epsilons))
+    # print ("len(self._epsilons)", len(self._epsilons))
     self._epsilons = list(reversed(self._epsilons))
 
   def set_stop(self):
@@ -293,10 +289,10 @@ class DynamicsModel:
     if self.dim == 2:
       s[dims_ball[-1]] = 0.
       s[dims_agent[-1]] = 0.
-      
+
     if self.has_wind():
       s += self.noise_wind_current
-      self.noise_wind_current[:] = 0. # delete
+      self.noise_wind_current[:] = 0.  # delete
 
     if self.is_nonlinear():
       self._epsilons.append(s)
@@ -318,12 +314,12 @@ class DynamicsModel:
   def step_linear(self, x_t, u_t, noise=True):
     """ Evaluate the system x and u at one time step """
     # linear system
-    #sys.stdout.write("["+str((sgm)) + "] \n")
-    #sys.stdout.flush()
-    
+    # sys.stdout.write("["+str((sgm)) + "] \n")
+    # sys.stdout.flush()
+
     cdt = self.cdt
     if len(x_t.shape) == 2:
-      cdt = cdt.reshape((-1,1))
+      cdt = cdt.reshape((-1, 1))
     else:
       cdt = cdt.reshape((-1,))
 
@@ -332,43 +328,43 @@ class DynamicsModel:
     if noise:
       # ball: set acceleration due to gravity (because might get overwritten)
       # due to our constant acceleration model
-      #x[2], x[5], x[8] = self._GRAVITY_VECTOR # FIXME
+      # x[2], x[5], x[8] = self._GRAVITY_VECTOR # FIXME
 
       sgm = self._sample_system_noise()
       if np.any(sgm != 0.):
         # add noise
         x += sgm
-  
-        #sys.stdout.write(""+str(x) + " \n")
-        #sys.stdout.write("" + str(sgm) + " \n")
-        #sys.stdout.flush()
+
+        # sys.stdout.write(""+str(x) + " \n")
+        # sys.stdout.write("" + str(sgm) + " \n")
+        # sys.stdout.flush()
 
     return x
-  
+
   def step_drag(self, x_t, u_t, noise=True):
-    """ 
+    """
     Compared to
       http://www.livephysics.com/simulations/mechanics-sim/projectile-motion-simulation/
     """
-    #x = self.step_linear(x_t, u_t)
-    #x = np.dot(self.Adt, x_t) + np.dot(self.Bdt, u_t)
+    # x = self.step_linear(x_t, u_t)
+    # x = np.dot(self.Adt, x_t) + np.dot(self.Bdt, u_t)
 
     x_t_ = np.asarray(x_t).reshape((-1,))
     u_t_ = np.asarray(u_t).reshape((-1,))
-    
+
     x = np.dot(self.Adt, x_t_) + np.dot(self.Bdt, u_t_) + self.cdt.reshape((-1,))
-    
-    v = np.array( [ x[1], x[4], x[7] ] ) 
+
+    v = np.array([x[1], x[4], x[7]])
     # new acceleration
-    #x[2], x[5], x[8] = self._GRAVITY_VECTOR - v*v * 0.5 * self.rho * self.c * self.A/self.mass
-    ddx = - v*v * 0.5 * self.rho * self.c * self.A/self.mass
-    for i,idx in enumerate([2,5,8]):
+    # x[2], x[5], x[8] = self._GRAVITY_VECTOR - v*v * 0.5 * self.rho * self.c * self.A/self.mass
+    ddx = - v * v * 0.5 * self.rho * self.c * self.A / self.mass
+    for i, idx in enumerate([2, 5, 8]):
       x[idx] += ddx[i]
 
     if noise:
       sgm = self._sample_system_noise()
-      #sys.stdout.write("["+str(max(sgm)) + "] ")
-      #sys.stdout.flush()    
+      # sys.stdout.write("["+str(max(sgm)) + "] ")
+      # sys.stdout.flush()
       x += sgm
 
     return x
@@ -377,105 +373,105 @@ class DynamicsModel:
     return np.any(np.abs(self.wind_gust_force)) > 0 and self.wind_gust_duration > 0.
 
   def precompute_trajectory(self, x0):
-    # get linear duration 
+    # get linear duration
     t_n, N, x_n, z_n = self.get_time_to_impact(x0)
     fr = DynamicsModel().FRAMERATE
-    
+
     if not self.is_nonlinear():
       # nothing to do
       return t_n, N, x_n, z_n
 
-    
     self.set_presimulate()
-    
+
     if self.has_wind():
-      assert(self.wind_gust_relative_start_time >= 0. and self.wind_gust_relative_start_time < 1.)
+      assert (self.wind_gust_relative_start_time >= 0. and self.wind_gust_relative_start_time < 1.)
       self.wind_gust_start_time = t_n * self.wind_gust_relative_start_time
-      #self.wind_gust_end_time = t_n * (self.wind_gust_relative_start_time+self.wind_gust_duration)
+      # self.wind_gust_end_time = t_n * (self.wind_gust_relative_start_time+self.wind_gust_duration)
       self.wind_gust_end_time = t_n * (self.wind_gust_relative_start_time) + self.wind_gust_duration
       print ("Dynamics: wind_gust -> %.2f s to %.2f s   -> %d to %d" \
-        % (self.wind_gust_start_time, self.wind_gust_end_time, round(self.wind_gust_start_time/fr), round(self.wind_gust_end_time/fr)))
+             % (self.wind_gust_start_time, self.wind_gust_end_time, round(self.wind_gust_start_time / fr),
+                round(self.wind_gust_end_time / fr)))
       self.noise_wind_current = np.zeros(STATE_DIM)
 
-    dims_ball = [2, 5, 8] # FIXME copied
+    dims_ball = [2, 5, 8]  # FIXME copied
 
     # we need to pre-simulate
     x_ = x0.reshape((-1,))
     i = 0
     while i == 0 or x_[3] > 0.:
-      tcur = i/fr
-      
+      tcur = i / fr
+
       # wind
       if self.has_wind():
         self.noise_wind_current[:] = 0.
         if tcur > self.wind_gust_start_time and tcur < self.wind_gust_end_time:
-            self.noise_wind_current[dims_ball] = self.wind_gust_force
-            self.noise_wind_current[dims_ball] /= self.mass # it's a force
-            #print ("WIND! %d, %f" % (i, tcur, ))
-            #print self.noise_wind_current[dims_ball]
-          
-      x_ = self.step(x_, [0.,0.]).reshape((-1,))
+          self.noise_wind_current[dims_ball] = self.wind_gust_force
+          self.noise_wind_current[dims_ball] /= self.mass  # it's a force
+          # print ("WIND! %d, %f" % (i, tcur, ))
+          # print self.noise_wind_current[dims_ball]
+
+      x_ = self.step(x_, [0., 0.]).reshape((-1,))
       i += 1
 
-    #print "last x ", x_[3]
+    # print "last x ", x_[3]
 
-    t_n = i/fr
+    t_n = i / fr
     x_n = x_[0]
     z_n = x_[6]
 
-    self.set_run()      
-    
+    self.set_run()
+
     return t_n, i, x_n, z_n
-  
+
   def get_time_to_impact(self, x0, ignore_drag=False):
-      """
-          Returns time to impact related variables as tuple:
-            - t seconds
-            - N steps at current framerate
-            - x position of ball
-            - z position of ball
-          
-      """
+    """
+        Returns time to impact related variables as tuple:
+          - t seconds
+          - N steps at current framerate
+          - x position of ball
+          - z position of ball
 
-      drag = self.drag
-      if ignore_drag:
-        drag = False
+    """
 
-      x0 = x0.flatten()
-      
-      if x0[3] < 0:
-          return 0,0,0,0
-        
-      if not drag:
-          g = self.GRAVITY
-          a,b,c = -g/2, x0[4], x0[3]
-        
-          phalf = - b/(2.0*a)
-          pm_term = np.sqrt( (b**2) / (4*a**2) - c/a)
-          t_n = phalf+pm_term
-          x_n = x0[1]*t_n + x0[0]
-          z_n = 0.
-          
-      else:
-          #dynamics.set_presimulate()
-      
-          # we need to pre-simulate
-          x_ = x0.reshape((-1,))
-          i = 0
-          while i == 0 or x_[3] > 0.:
-            x_ = self.step_drag(x_, [0.,0.], noise=False).reshape((-1,))
-            i += 1
-      
-          t_n = i/self.FRAMERATE
-          x_n = x_[0]
-          z_n = x_[6]
+    drag = self.drag
+    if ignore_drag:
+      drag = False
 
-      assert(not np.isnan(t_n))
-      
-      # t_n seconds at current FRAMERATE
-      N = int(np.ceil(t_n*self.FRAMERATE))  
+    x0 = x0.flatten()
 
-      return t_n, N, x_n, z_n      
+    if x0[3] < 0:
+      return 0, 0, 0, 0
+
+    if not drag:
+      g = self.GRAVITY
+      a, b, c = -g / 2, x0[4], x0[3]
+
+      phalf = - b / (2.0 * a)
+      pm_term = np.sqrt((b ** 2) / (4 * a ** 2) - c / a)
+      t_n = phalf + pm_term
+      x_n = x0[1] * t_n + x0[0]
+      z_n = 0.
+
+    else:
+      # dynamics.set_presimulate()
+
+      # we need to pre-simulate
+      x_ = x0.reshape((-1,))
+      i = 0
+      while i == 0 or x_[3] > 0.:
+        x_ = self.step_drag(x_, [0., 0.], noise=False).reshape((-1,))
+        i += 1
+
+      t_n = i / self.FRAMERATE
+      x_n = x_[0]
+      z_n = x_[6]
+
+    assert (not np.isnan(t_n))
+
+    # t_n seconds at current FRAMERATE
+    N = int(np.ceil(t_n * self.FRAMERATE))
+
+    return t_n, N, x_n, z_n
 
   def compute_J(self, x_t, u_t):
     if self.drag:
@@ -486,48 +482,47 @@ class DynamicsModel:
       return self.Adt
 
   def _derive_drag_jacobian(self):
-    #dt = self.DT
+    # dt = self.DT
     g = self.GRAVITY
     rho, c, Ac, mass = self.rho, self.c, self.A, self.mass
 
     import sympy as sp
-    from sympy.abc import x,y,z
-    #from sympy import symbols, Matrix
+    from sympy.abc import x, y, z
+    # from sympy import symbols, Matrix
 
     dx, dy, dz, ddx, ddy, ddz = sp.symbols("dx, dy, dz, ddx, ddy, ddz")
     ax, az, dax, daz, ddax, ddaz = sp.symbols("ax, az, dax, daz, ddax, ddaz")
-    X = sp.Matrix([ x, dx, ddx, y, dy, ddy, z, dz, ddz, 
-                   ax, dax, ddax, az, daz, ddaz, ] )
+    X = sp.Matrix([x, dx, ddx, y, dy, ddy, z, dz, ddz,
+                   ax, dax, ddax, az, daz, ddaz, ])
 
-    ux, uz  = sp.symbols("ux, uz")
+    ux, uz = sp.symbols("ux, uz")
     U = sp.Matrix([ux, uz])
-    
+
     A = sp.Matrix(self.Adt)
     B = sp.Matrix(self.Bdt)
     f_xu = sp.Matrix(A.dot(X)) + sp.Matrix(B.dot(U))
     # drag
-    v = sp.Matrix([ dx, dy, dz ])
-    
+    v = sp.Matrix([dx, dy, dz])
+
     # wrong: dd* does not evolve depending on the previous time step
-    #f_xu[2], f_xu[5], f_xu[8] = sp.Matrix([ddx, ddy, ddz]) \
+    # f_xu[2], f_xu[5], f_xu[8] = sp.Matrix([ddx, ddy, ddz]) \
 
     # Correct but -g is constant and will thus disappear from Jacobian
     # -> put it into starting state
-    #f_xu[2], f_xu[5], f_xu[8] = sp.Matrix([0, -g, 0]) \
+    # f_xu[2], f_xu[5], f_xu[8] = sp.Matrix([0, -g, 0]) \
     #  - v.multiply_elementwise(v) * 0.5 * rho * c * Ac/mass
-    
+
     # Correct: ddx and ddz solely depend on squared velocity
     f_xu[2], f_xu[5], f_xu[8] = \
-      - v.multiply_elementwise(v) * 0.5 * rho * c * Ac/mass
+      - v.multiply_elementwise(v) * 0.5 * rho * c * Ac / mass
 
-      
     self.FJ_drag = f_xu.jacobian(sp.Matrix([X]))
-    self._compute_J_drag = sp.lambdify( (dx, dy, dz), self.FJ_drag)
-    self.compute_J_drag = lambda x, _: self._compute_J_drag( x[1], x[4], x[7] )
+    self._compute_J_drag = sp.lambdify((dx, dy, dz), self.FJ_drag)
+    self.compute_J_drag = lambda x, _: self._compute_J_drag(x[1], x[4], x[7])
 
   def observe_state(self, x_t):
     return self.C.dot(x_t)
-    
+
   @property
   def state_dim(self):
     return self.Adt.shape[0]
@@ -535,12 +530,12 @@ class DynamicsModel:
   @property
   def action_dim(self):
     return self.Bdt.shape[1]
-  
+
   @property
   def observation_dim(self):
     return self.Cdt.shape[0]
 
-  
+
 # ----------------------------------------------------------------------------------------
 
 class RecordedTrajectoryStepper:
@@ -693,51 +688,3 @@ def observation_noise_ball(x, std=[0.01,0.01,0.01], noiseDistFactor=0.05, noise_
 
 # ----------------------------------------------------------------------------------------
 
-class Strategy(object):
-  """ Base class for strategies """
-
-  control_type = "acceleration"
-  # other possibilities: position -> set position directly
-
-  def __init__(self, dicts):
-    pass
-  
-  def start(self, **kwargs):
-    pass
-
-  def stop(self, **kwargs):
-    pass
-
-  def write_logs(self, log_root, trial):
-    pass
-
-  def step(self, i, x, dicts):
-    raise NotImplementedError()
-
-  @staticmethod
-  def get_weights(strategy, dicts, W_name, W_shape, W=None):
-    separator = "/"
-    if strategy is None or strategy == "":
-      separator = ""
-    
-    if len(W_shape) == 0:
-      return dicts[strategy+separator+W_name]
-      
-    if W is None:
-      W = np.zeros(W_shape)
-    else:
-      W[:] = 0
-    
-    for i in range(W_shape[0]):
-      if len(W_shape) == 1:
-        dict_ptn='%s%s%s_%d' % (strategy, separator, W_name, i)
-        W[i] = np.array(dicts[dict_ptn])
-      else:
-        for j in range(W_shape[1]):
-          dict_ptn='%s%s%s_%d,%d' % (strategy, separator, W_name, i, j)
-          try:
-            W[i,j] = np.array(dicts[dict_ptn])
-          except:
-            warn("%s could not be parsed" % dict_ptn)
-    
-    return W  
