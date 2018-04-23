@@ -298,6 +298,18 @@ def resolve_strategy(strategy, p):
     return real_strategy_name, p
 
 
+def initialize_params_3d(p, D, aphi=np.pi / 4):
+    # print "3D experiment; aphi = " + str(aphi) + ", D=" + str(D)
+    p['Agent']['x_init_type'] = 'spherical'
+    p['Agent']['x_relative'] = True
+    p['Agent']['x_init'] = [float(aphi), 0., float(D)]
+    if 'BallCatching' not in p:
+        p['BallCatching'] = {}
+    p['BallCatching']['dim'] = 3
+
+    return p
+
+
 # =======================================================================
 # default experiment
 def single_experiment(strategy, parameters={}, trials=1,

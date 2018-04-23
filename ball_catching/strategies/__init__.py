@@ -2,6 +2,7 @@ from ball_catching.strategies.angular import AP2DStrategy, COVOAC2DStrategy, COV
 from ball_catching.strategies.cartesian_lqr import LQRStrategy, iLQRStrategy
 from ball_catching.strategies.misc import ZeroStrategy
 
+# from ball_catching.strategies.cartesian_mpc import MPCStrategy
 try:
     from ball_catching.strategies.cartesian_mpc import MPCStrategy
 except:

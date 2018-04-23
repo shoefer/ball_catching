@@ -10,11 +10,11 @@ No Free Lunch in Ball Catching: A Comparison of Cartesian and Angular Representa
 
 as well as my doctoral thesis
 
-    [Sebastian Höfer. On decomposability in robot reinforcement learning. Dissertation. Technische Universität Berlin, Germany, June 2017.](http://dx.doi.org/10.14279/depositonce-6054)
+[Sebastian Höfer. On decomposability in robot reinforcement learning. Dissertation. Technische Universität Berlin, Germany, June 2017.](http://dx.doi.org/10.14279/depositonce-6054)
 
 It contains
 
-- A lightweight python library for running ball catching experiment, including implementations of all
+- A lightweight python library for running ball catching experiments, including implementations of all
   control strategies presented in the paper.
 - jupyter notebooks with proofs included in the paper (verified proofs, using sympy).
 
@@ -45,7 +45,7 @@ that contains all packages required.
 
     python ball_catching/run.py single --strategies COVOAC2DStrategy
 
-It should given an output like this:
+It should pop up a couple plots and return an console output similar to this:
 
     Statistics: (trials 1)
     mean(terminal_distance) -> 0.004031813928037309
@@ -105,6 +105,22 @@ Inspect the performance of the strategy in a particular initial condition:
 
     python ball_catching/plotting/single_experiment_plot.py 2DBallCatching__2018-04-22_22-04-54-399560/COVOAC2DStrategy_2D_ideal_DTinv-60_2018-04-22_22-04-54-400944/BC_COVOAC2DStrategy_2018-04-22_22-04-54-402504
 
+### 3D experiments
+
+For example, angular COV-OAC strategy:
+
+    python ball_catching/run.py single3d --strategies COVOAC3DStrategy
+
+or LQG:
+
+    python ball_catching/run.py single3d --strategies LQGStrategy
+
+### Adding noise
+
+Compare performance of strategies under drag:
+
+    python ball_catching/run.py multi3d --range xs --strategies LQGStrategy COVOAC3DStrategy --
+
 
 ### Other experiments
 
@@ -112,35 +128,43 @@ You have full control over all types of experiments you want to run. To get help
 
     python ball_catching/run.py --help
 
-### Running MPCStrategy
+## Running MPCStrategy
 
 In order to run the model-predictive control strategy in belief space [Belousov, 2016], you need to install casadi,
 an autodiff framework. The authors original source code is used: [easy_catch](https://github.com/b4be1/easy_catch)
 
-1) Install casadi 2.4.3
+### Install casadi 2.4.3
 
 - Go to https://sourceforge.net/projects/casadi/files/CasADi/2.4.3/ and download the py27 binary for your OS, e.g.
   for MacOS get casadi-py27-np1.9.1-v2.4.3.tar.gz
 
 - Extract to some location in your workspace, e.g.
 
-    tar xfz casadi-py27-np1.9.1-v2.4.3.tar.gz ~/Workspace/casadi
+    mkdir -p ~/Workspace/casadi
+    tar xfz casadi-py27-np1.9.1-v2.4.3.tar.gz -C ~/Workspace/casadi
 
 - Append location to casadi to your python path. Assuming you moved the files to
   ```~/Workspace/casadi```, add this line to your .bashrc (.bash_profile on Mac):
 
     export PYTHONPATH="${HOME}/Workspace/casadi:$PYTHONPATH"
 
-2) Run experiment
+### Run experiment
 
     python ball_catching/run.py single --strategies MPCStrategy
+
+Note that this will take significantly longer than the other strategies due to the complexity of the method.
 
 ## Proofs
 
 The following proofs are available in jupyter notebook:
 
-- **Analysis of Chapman's Strategy** (Section 4.2.1): ```ipynb/proofs-chapman.ipynb```
-- **Angular Representation Violates Markov Property** (Section 4.2.1, Supplementary material): ```ipynb/proof-angular-non-markov.ipynb```
+- **Analysis of Chapman's Strategy** (Section 4.2.1): ```notebook/proofs-chapman.ipynb```
+- **Angular Representation Violates Markov Property** (Section 4.2.1, Supplementary material): ```notebook/proof-angular-non-markov.ipynb```
+
+To inspect the proofs, run jupyter notebook in the ball_catching/notebook folder and then open the notebooks in a browser
+
+    cd ball_catching/notebook
+    jupyter notebook
 
 
 ## References
