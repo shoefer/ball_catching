@@ -25,25 +25,21 @@ that contains all packages required.
 
 1) Create conda environment
 
-    
-    conda create -n bc python=2.7
-    source activate bc
+    ```conda create -n bc python=2.7```<br/>
+    ```source activate bc```<br/>
 
 2) Clone the repository
 
-
-    git clone https://github.com/shoefer/ball_catching.git ball_catching
+    ```git clone https://github.com/shoefer/ball_catching.git ball_catching```
 
 3) Install requirements
-
     
-    pip install -r requirements.txt
+    ```pip install -r requirements.txt```
 
 4) Install ball_catching
 
-
-    cd ball_catching        # need to be in root folder of git repo
-    pip install -e .
+    ```cd ball_catching        # need to be in root folder of git repo```<br/>
+    ```pip install -e .```
 
 5) Done -- start running experiments!
 
