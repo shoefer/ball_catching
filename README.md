@@ -66,7 +66,7 @@ It should pop up a couple plots and return an console output similar to this:
 
 This command will run a comparison of one or multiple strategies under different settings:
 
-    python ball_catching/run.py multi --range s --strategies LQGStrategy COVOAC2DStrategy
+    python ball_catching/run.py multi --range m --strategies LQGStrategy COVOAC2DStrategy
 
 It will run for a while and then automatically generate experimental data and show plots (unless you pass
 ```--no_plot```). The experimental data will be stored in ```~/ball_catching_data``` (you can change this in config.py).
@@ -119,7 +119,7 @@ or LQG:
 
 Compare performance of strategies under drag:
 
-    python ball_catching/run.py multi3d --range s --strategies LQGStrategy COVIO3DStrategy --noise drag --noise_only
+    python ball_catching/run.py multi3d --range m --strategies LQGStrategy COVIO3DStrategy --noise drag --noise_only
 
 ### Other experiments
 
@@ -135,17 +135,17 @@ an autodiff framework. The authors original source code is used: [easy_catch](ht
 ### Install casadi 2.4.3
 
 - Go to https://sourceforge.net/projects/casadi/files/CasADi/2.4.3/ and download the py27 binary for your OS, e.g.
-  for MacOS get casadi-py27-np1.9.1-v2.4.3.tar.gz
+  for MacOS get ```casadi-py27-np1.9.1-v2.4.3.tar.gz```
 
 - Extract to some location in your workspace, e.g.
 
-    mkdir -p ~/Workspace/casadi
-    tar xfz casadi-py27-np1.9.1-v2.4.3.tar.gz -C ~/Workspace/casadi
+      mkdir -p ~/Workspace/casadi
+      tar xfz casadi-py27-np1.9.1-v2.4.3.tar.gz -C ~/Workspace/casadi
 
 - Append location to casadi to your python path. Assuming you moved the files to
   ```~/Workspace/casadi```, add this line to your .bashrc (.bash_profile on Mac):
 
-    export PYTHONPATH="${HOME}/Workspace/casadi:$PYTHONPATH"
+      export PYTHONPATH="${HOME}/Workspace/casadi:$PYTHONPATH"
 
 ### Run experiment
 
