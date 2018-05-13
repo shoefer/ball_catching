@@ -23,21 +23,29 @@ It contains
 We recommend to use [anaconda](https://www.continuum.io/downloads) which is an easy-to-install complete python bundle
 that contains all packages required.
 
-1) Check out ball-catching from the repository
+1) Create conda environment
 
-    git clone https://github.com/shoefer/ball_catching.git ball_catching
-
-2) Create conda environment
-
+    
     conda create -n bc python=2.7
     source activate bc
 
-3) Install
+2) Clone the repository
+
+
+    git clone https://github.com/shoefer/ball_catching.git ball_catching
+
+3) Install requirements
+
+    
+    pip install -r requirements.txt
+
+4) Install ball_catching
+
 
     cd ball_catching        # need to be in root folder of git repo
     pip install -e .
 
-4) Run experiments!
+5) Done -- start running experiments!
 
 ### Single strategy under single condition
 
@@ -130,7 +138,8 @@ You have full control over all types of experiments you want to run. To get help
 ## Running MPCStrategy
 
 In order to run the model-predictive control strategy in belief space [Belousov, 2016], you need to install casadi,
-an autodiff framework. The authors original source code is used: [easy_catch](https://github.com/b4be1/easy_catch)
+an autodiff framework. The authors original source code is used [easy_catch](https://github.com/b4be1/easy_catch) and 
+included in this repo.
 
 ### Install casadi 2.4.3
 
