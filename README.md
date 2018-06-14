@@ -6,7 +6,7 @@ This package accompanies the paper
 
 [Höfer, Raisch, Toussaint, Brock.
 No Free Lunch in Ball Catching: A Comparison of Cartesian and Angular Representations for Control.
-2018]()
+2018](http://dx.doi.org/10.1371/journal.pone.0197803)
 
 as well as my doctoral thesis
 
@@ -16,11 +16,11 @@ It contains
 
 - A lightweight python library for running ball catching experiments, including implementations of all
   control strategies presented in the paper.
-- jupyter notebooks with proofs included in the paper (verified proofs, using sympy).
+- Jupyter notebooks with proofs included in the paper (verified proofs, using sympy).
 
 ## Quickstart
 
-We recommend to use [anaconda](https://www.continuum.io/downloads) which is an easy-to-install complete python bundle
+We recommend to use [anaconda](https://www.continuum.io/downloads) which is an easy-to-install, complete python bundle
 that contains all packages required.
 
 1) Create conda environment
@@ -49,7 +49,7 @@ that contains all packages required.
 
     python ball_catching/run.py single --strategies COVOAC2DStrategy
 
-It should pop up a couple plots and return an console output similar to this:
+A couple of plots should pop up, and the console should state an output similar to this one:
 
     Statistics: (trials 1)
     mean(terminal_distance) -> 0.004031813928037309
@@ -134,7 +134,7 @@ You have full control over all types of experiments you want to run. To get help
 ## Running MPCStrategy
 
 In order to run the model-predictive control strategy in belief space [Belousov, 2016], you need to install casadi,
-an autodiff framework. The authors original source code is used [easy_catch](https://github.com/b4be1/easy_catch) and 
+an autodiff framework. The authors' original source code is used [easy_catch](https://github.com/b4be1/easy_catch) and 
 included in this repo.
 
 ### Install casadi 2.4.3
@@ -142,13 +142,13 @@ included in this repo.
 - Go to https://sourceforge.net/projects/casadi/files/CasADi/2.4.3/ and download the py27 binary for your OS, e.g.
   for MacOS get ```casadi-py27-np1.9.1-v2.4.3.tar.gz```
 
-- Extract to some location in your workspace, e.g.
+- Extract the file to some location in your workspace, e.g.
 
       mkdir -p ~/Workspace/casadi
       tar xfz casadi-py27-np1.9.1-v2.4.3.tar.gz -C ~/Workspace/casadi
 
 - Append location to casadi to your python path. Assuming you moved the files to
-  ```~/Workspace/casadi```, add this line to your .bashrc (.bash_profile on Mac):
+  ```~/Workspace/casadi``` using the previous command, add this line to your ```.bashrc``` (```.bash_profile``` on Mac):
 
       export PYTHONPATH="${HOME}/Workspace/casadi:$PYTHONPATH"
 
@@ -160,12 +160,13 @@ Note that this will take significantly longer than the other strategies due to t
 
 ## Proofs
 
-The following proofs are available in jupyter notebook:
+The following proofs are available in jupyter notebooks:
 
 - **Analysis of Chapman's Strategy** (Section 4.2.1): ```notebook/proofs-chapman.ipynb```
 - **Angular Representation Violates Markov Property** (Section 4.2.1, Supplementary material): ```notebook/proof-angular-non-markov.ipynb```
 
-To inspect the proofs, run jupyter notebook in the ball_catching/notebook folder and then open the notebooks in a browser
+To inspect the proofs, run ```jupyter notebook``` in the ball_catching/notebook folder and then open 
+the notebooks in a browser.
 
     cd ball_catching/notebook
     jupyter notebook
